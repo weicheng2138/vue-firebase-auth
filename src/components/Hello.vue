@@ -1,86 +1,25 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://forum.vuejs.org"
-          target="_blank"
-        >
-          Forum
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://chat.vuejs.org"
-          target="_blank"
-        >
-          Community Chat
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://twitter.com/vuejs"
-          target="_blank"
-        >
-          Twitter
-        </a>
-      </li>
-      <br>
-      <li>
-        <a
-          href="http://vuejs-templates.github.io/webpack/"
-          target="_blank"
-        >
-          Docs for This Template
-        </a>
-      </li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li>
-        <a
-          href="http://router.vuejs.org/"
-          target="_blank"
-        >
-          vue-router
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vuex.vuejs.org/"
-          target="_blank"
-        >
-          vuex
-        </a>
-      </li>
-      <li>
-        <a
-          href="http://vue-loader.vuejs.org/"
-          target="_blank"
-        >
-          vue-loader
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://github.com/vuejs/awesome-vue"
-          target="_blank"
-        >
-          awesome-vue
-        </a>
-      </li>
-    </ul>
-    <button @click="logout">Logout</button>
+    <h2>Select your working dead...</h2>
+
+    <template>
+      <!--<div>-->
+        <!--<v-date-picker-->
+          <!--mode='single'-->
+          <!--v-model='selectedValue'-->
+        <!--&gt;-->
+        <!--</v-date-picker>-->
+      <!--</div>-->
+      <v-calendar
+        :attributes='attributes'
+        @dayclick='dayClicked'>
+      </v-calendar>
+    </template>
+
+    <div>
+      <button @click="logout">Logout</button>
+    </div>
   </div>
 </template>
 
@@ -90,8 +29,47 @@
   export default {
     name: 'Hello',
     data() {
+
       return {
-        msg: 'Welcome to Your Vue.js App'
+        attributes: [
+          // This is a single attribute
+          {
+            // An optional key can be used for retrieving this attribute later,
+            // and will most likely be derived from your data object
+            key: 1,
+            // The attribute can contain any of the following object types
+            // -> highlight/dot/bar/popover/contentStyle/customData
+            highlight ({ isFocused }) {
+              return {
+                backgroundColor: '#ff8080',
+              };
+            },
+            popover: {
+              label: 'No need to work!',
+            },
+            contentStyle: {
+              color: '#fafafa',
+            },
+            // popover: { ... },
+            // contentStyle: { ... },
+            // Supply your custom data object for later access, if needed
+            // customData: { ... },
+
+            // We also need some dates to know where to display the attribute
+            // We use a single date here, but it could also be a date range or a complex date pattern.
+            // Arrays are also allowed
+            dates: [
+
+            ],
+            // You can optionally provide dates to exclude.
+            // All other dates are used by the attributed.
+            excludeDates: null,
+            // Think of `order` like `z-index`
+            order: 0
+          }
+        ],
+        msg: 'Welcome to Our Happy Working Dead *.*',
+        selectedDay: null
       }
     },
     methods: {
@@ -99,7 +77,17 @@
         firebase.auth().signOut().then(() => {
           this.$router.replace('login');
         })
-      }
+      },
+      dayClicked(day) {
+        let index = this.attributes[0].dates.indexOf(day.date);
+        if (index !== -1) {
+          console.log(day.date);
+          this.attributes[0].dates.splice(index, 1);
+        } else {
+          this.attributes[0].dates.push(day.date);
+        }
+      },
+
     }
   }
 </script>
@@ -125,6 +113,7 @@
   }
 
   button {
+    margin-top: 30px;
     padding: 10px 20px;
     background: #42b983;
     color: white;
@@ -133,5 +122,12 @@
     border-radius: 22px;
     outline: 0;
     cursor: pointer;
+  }
+  #hello {
+    display: flex;
+  }
+
+  .selected-day {
+    margin-left: 10px;
   }
 </style>

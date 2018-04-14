@@ -6,6 +6,14 @@ import Hello from '@/components/Hello'
 import Login from '@/components/Login'
 import SignUp from '@/components/SignUp'
 
+import VCalendar from 'v-calendar';
+import 'v-calendar/lib/v-calendar.min.css';
+
+// Use v-calendar, v-date-picker & v-popover components
+Vue.use(VCalendar, {
+  firstDayOfWeek: 2  // Monday
+});
+
 Vue.use(Router);
 
 let router = new Router({
